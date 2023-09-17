@@ -1,0 +1,23 @@
+
+ZIPF: 3 INDICES
+HEAPS: 1 INDEX, novela
+
+
+TO DO: 
+    -Use CountWords.py using --index --alpha and remove url's, dates, 
+        unreadable stuff. Try to find values for (a,b,c) that fit zipf's law
+    -Find values for (k,B) that satisfy Heaps law
+
+
+TO DELIVER:
+    report 3-4 pages of report in how to find the most fitting values
+    for zipf and heaps law 
+
+    source code of implementation 
+
+
+RESULTADOS IMPORTANTES: 
+    - palabras mas frecuentes y menos frecuentes
+    - Cuales palabras son stopwords
+    - Contar cuantas palabras distintas tengo con diferentes N ç
+    - Diferencias entre los 3 indices en el ajuste de parametros?
