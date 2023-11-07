@@ -1,5 +1,0 @@
-- Per evaluar els parameters alfa i beta tenim varies maneres:
-    - fer servir algun training set supervisat d'internet
-    - fer hipotesis propies de documents que haurien de ser rellevants per a paraules ren concret, com patata
-
--script para printear cuales son los k docuemntos mas importantes por iteracion (esta explorando un conjunto gradne o no)
