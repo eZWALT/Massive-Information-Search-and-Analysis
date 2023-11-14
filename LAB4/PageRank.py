@@ -5,14 +5,11 @@ import time
 import sys
 import argparse
 
+
 edgeList = []           # list of Edge
 edgeHash = dict()       # hash of edge to ease the match
 airportHash = dict()    # hash key IATA code -> Airport
-
 airportList = []        # list of all Airports
-terminalList = []       # list of terminal airports
-isolatedList = []       # list of isolated airports
-unreachableList = []    # list of unreachable airports
 
 PageRank = []
 
@@ -44,6 +41,10 @@ class Airport:
         self.outweight = 0.0
         #index of airport in airport list (Optional) 
         self.index = index
+        
+        #booleans
+        self.is_terminal = False 
+        self.is_isolated = False
 
     def add_edge(self, origin):
         if origin in self.routeHash:
@@ -121,28 +122,22 @@ def eraseAirport(airport: Airport):
 
 
 # O(n)
-def getSpecialAirportsAndApplyRemoval(rem_isolated, rem_terminal, rem_unreachable):
+def getSpecialAirportsProperties():
+    
     for airport in airportList:
         is_term = airport.outweight == 0.0
-        is_isol = len(airport.routes)
+        is_isol = len(airport.routes) == 0
         is_both = is_term and is_isol 
 
         if is_both:
-            terminalList.append(airport)
-            isolatedList.append(airport)
-            unreachableList.append(airport)
-            if rem_unreachable or rem_isolated or rem_terminal:
-                eraseAirport(airport)
+            airport.is_terminal = True 
+            airport.is_isolated = True
 
         elif is_isol:
-            isolatedList.append(airport)
-            if rem_isolated:
-                eraseAirport(airport)
+            airport.is_isolated = True
 
         elif is_term:
-            terminalList.append(airport)
-            if rem_terminal:
-                eraseAirport(airport)
+            airport.is_isolated = True
 
 
 #OUT MUST BE COMPUTED AS THE SUM OF WEIGHTS OF ALL EDGES
@@ -164,8 +159,12 @@ def computePageRanks(Lambda: float, Epsilon: float):
             airport_i = airportList[i]
             summ = 0
             #iterate over all incoming routes of that airport
-            for edge in airport_i.routes:
-                summ += P[edge.index] * edge.weight / airportList[edge.index].outweight
+            if airport_i.is_terminal or airport_i.is_isolated:
+                #assume summ = 1.0/n to avoid PageRank conflicts 
+                summ = 1.0/n
+            else:
+                for edge in airport_i.routes:
+                    summ += P[edge.index] * edge.weight / airportList[edge.index].outweight
             Q[i] = (Lambda * summ + (1.0 - Lambda)/n )
 
         iterations += 1
@@ -199,22 +198,16 @@ def main(argv=None):
     parser.add_argument("--l", default=0.85, type=float, help="Damping factor for google matrix")
     parser.add_argument("--e", default=1 * 10**(-12), type=float, help="Epsilon > 0 small numbers used as a difference stopping condition in the PageRank loop")
     parser.add_argument("--k", default=10, type=int, help="Number of k first pageRanks to show")
-    parser.add_argument("--t", default=False, type=bool, help="Boolean that indicates if terminal airports (no outgoing routes) are removed or not")
-    parser.add_argument("--i", default=False, type=bool, help="Boolean that indicates if isolated airports (no incoming routes) are removed or not")
-    parser.add_argument("--u", default=False, type=bool, help="Boolean that indicates if unreachable airports are removed or not")
     args = parser.parse_args()
 
     Lambda = args.l
     Epsilon = args.e 
     k = args.k 
-    remove_isolated = args.i
-    remove_terminal = args.t
-    remove_unreachable = args.u
     
     #read files
     readAirports("./airports.txt")
     readRoutes("./routes.txt")
-    getSpecialAirportsAndApplyRemoval(remove_isolated, remove_terminal, remove_unreachable)
+    getSpecialAirportsProperties()
 
 
     #basic main
@@ -225,6 +218,7 @@ def main(argv=None):
     outputPageRanks(k)
     print("#Iterations:", num_iterations)
     print("Time of computePageRanks():", execution_time)
+    print(f"The sum of all PageRank is {sum(PageRank)}")
 
 
 if __name__ == "__main__":
