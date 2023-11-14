@@ -4,6 +4,9 @@ from collections import namedtuple
 import time
 import sys
 import argparse
+import matplotlib.pyplot as plt 
+import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
 
 
 edgeList = []           # list of Edge
@@ -209,7 +212,57 @@ def main(argv=None):
     readRoutes("./routes.txt")
     getSpecialAirportsProperties()
 
+    """
+    x = []
+    y = []
+    z = []
 
+    #epsilon_values = np.logspace(-1, -20, num=20)
+    #lambda_values = np.linspace(0, 1, num=20)
+
+    lambda_values = [0.05, 0.1, 0.15, 0.3, 0.45, 0.5, 0.65, 0.75, 0.85, 0.9]
+    epsilon_values = [10**(-6), 10**(-11), 10**(-12), (10)**(-16)]
+    for l in lambda_values:
+        for e in epsilon_values:
+            x.append(l)
+            y.append(e)
+            z.append(computePageRanks(l,e))
+
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_yticks(epsilon_values)
+    ax.scatter(x, y, z, c=z, marker='o')
+
+    ax.set_xlabel('Lambda Values')
+    ax.set_ylabel('Epsilon Values')
+    ax.set_zlabel('Number of iterations')
+    ax.set_title('Iterations as a function of Epsilon and Lambda')
+
+    plt.show()
+    """
+    #lambda experiment
+    lambda_values = np.linspace(0, 0.99, num=10)
+    iterations_lambda = [computePageRanks(l, 10**(-12)) for l in lambda_values]
+
+    plt.plot(lambda_values, iterations_lambda, marker='o')
+    plt.xlabel('Lambda Values')
+    plt.ylabel('Number of Iterations')
+    plt.title('Iterations as a Function of Lambda')
+    plt.show()
+
+
+    #epsilon experiment
+    epsilon_values = np.logspace(-3, -18, num=10)
+    iterations_epsilon = [computePageRanks(0.85, e) for e in epsilon_values]
+
+    plt.plot(epsilon_values, iterations_epsilon, marker='o')
+    plt.xscale('log')
+    plt.xlabel('Epsilon Values')
+    plt.ylabel('Number of Iterations')
+    plt.title('Iterations as a Function of Epsilon')
+    plt.show()
+
+    """
     #basic main
     time1 = time.time()
     num_iterations = computePageRanks(Lambda, Epsilon)
@@ -219,6 +272,17 @@ def main(argv=None):
     print("#Iterations:", num_iterations)
     print("Time of computePageRanks():", execution_time)
     print(f"The sum of all PageRank is {sum(PageRank)}")
+
+    #pagerank ranking experiment
+    x = range(len(airportList)) 
+    plt.plot(x, sorted(PageRank, reverse=True))
+    plt.yscale("log")
+    plt.xscale("log")
+    plt.xlabel("Log Ranking of airports")
+    plt.ylabel("Log PageRank associated")
+    plt.title("Pagerank Ranking (Log Scale)")
+    plt.show()
+    """
 
 
 if __name__ == "__main__":
