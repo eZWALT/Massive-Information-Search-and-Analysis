@@ -15,6 +15,9 @@ airportHash = dict()    # hash key IATA code -> Airport
 airportList = []        # list of all Airports
 
 PageRank = []
+num_terminals = 0
+num_isolated = 0
+num_inacessible = 0
 
 #Represents and edge (i,j,k) where i is the origin, j is the destination (implicit)
 # and k is the weight (or number of routes)
@@ -135,12 +138,18 @@ def getSpecialAirportsProperties():
         if is_both:
             airport.is_terminal = True 
             airport.is_isolated = True
+            global num_inacessible
+            num_inacessible += 1
 
         elif is_isol:
             airport.is_isolated = True
+            global num_isolated
+            num_isolated += 1
 
         elif is_term:
+            global num_terminals
             airport.is_isolated = True
+            num_terminals += 1
 
 
 #OUT MUST BE COMPUTED AS THE SUM OF WEIGHTS OF ALL EDGES
@@ -240,6 +249,7 @@ def main(argv=None):
 
     plt.show()
     """
+    """
     #lambda experiment
     lambda_values = np.linspace(0, 0.99, num=10)
     iterations_lambda = [computePageRanks(l, 10**(-12)) for l in lambda_values]
@@ -249,7 +259,8 @@ def main(argv=None):
     plt.ylabel('Number of Iterations')
     plt.title('Iterations as a Function of Lambda')
     plt.show()
-
+    """
+    """
 
     #epsilon experiment
     epsilon_values = np.logspace(-3, -18, num=10)
@@ -261,6 +272,7 @@ def main(argv=None):
     plt.ylabel('Number of Iterations')
     plt.title('Iterations as a Function of Epsilon')
     plt.show()
+    """
 
     """
     #basic main
@@ -272,6 +284,7 @@ def main(argv=None):
     print("#Iterations:", num_iterations)
     print("Time of computePageRanks():", execution_time)
     print(f"The sum of all PageRank is {sum(PageRank)}")
+    print(f"There's {num_inacessible} inacessible airports, {num_isolated} isolated and {num_terminals} terminals")
 
     #pagerank ranking experiment
     x = range(len(airportList)) 
