@@ -1,0 +1,10 @@
+- Perque la primera execució del k-means triga menys?
+- Explicacio qualitativa del nombre de clústers 
+- Experimentar amb el nombre de clusters k
+
+
+EXPERIMENTACIO
+- numero de cores en MapReduce vs temps d'execució
+- Experimentacio de la mida del vocabulari o el temps d'execucio en funcio de  MinFreq,MaxFreq
+- Experimentacio de la pursera dels clusters en funcio de minfreq i MaxFreq 
+- Experimentacio qualitativa dels prototips finals resultants
