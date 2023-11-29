@@ -1,0 +1,10 @@
+CLASS0:cluster+1.0 impact+1.0 moreov+1.0 optic+1.0 role+1.0 support+1.0 
+CLASS1:address+1.0 continu+1.0 input+1.0 practic+1.0 precis+1.0 shown+1.0 spatial+1.0 spectral+1.0 
+CLASS2:along+1.0 art+1.0 assum+1.0 best+1.0 complet+1.0 neural+1.0 open+1.0 scenario+1.0 typic+1.0 
+CLASS3:across+1.0 address+1.0 electron+1.0 establish+1.0 futur+1.0 input+1.0 particl+1.0 precis+1.0 sim+1.0 tool+1.0 variabl+1.0 
+CLASS4:continu+1.0 employ+1.0 establish+1.0 minim+1.0 practic+1.0 precis+1.0 sinc+1.0 support+1.0 
+CLASS5:account+1.0 furthermor+1.0 less+1.0 role+1.0 valid+1.0 
+CLASS6:domain+1.0 free+1.0 probabl+1.0 represent+1.0 therefor+1.0 us+1.0 
+CLASS7:along+1.0 around+1.0 cluster+1.0 detail+1.0 exhibit+1.0 frequenc+1.0 less+1.0 magnet+1.0 part+1.0 report+1.0 reveal+1.0 variat+1.0 
+CLASS8:address+1.0 around+1.0 detail+1.0 full+1.0 galaxi+1.0 impact+1.0 larger+1.0 light+1.0 matter+1.0 often+1.0 particl+1.0 spectral+1.0 wave+1.0 
+CLASS9:among+1.0 constant+1.0 doe+1.0 involv+1.0 minim+1.0 scenario+1.0 scheme+1.0 select+1.0 

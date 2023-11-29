@@ -151,9 +151,12 @@ class MRKmeansStep(MRJob):
         """
         num_docs = 0
         frequencies = {}
+        average_inertia = 0
         
+        values2 = []        
         for doc in values: 
             num_docs += 1
+            values2.append(doc)
             for word in doc:
                 if not word in frequencies:
                     frequencies[word] = 1
@@ -163,8 +166,12 @@ class MRKmeansStep(MRJob):
         new_prototype = []
         for word, freq in frequencies.items():
             new_prototype.append((word, freq/num_docs))
+        
+        #compute the average inertia(distortion)
+        for doc in values2: 
+            average_inertia += self.jaccard(new_prototype, doc) ** 2
 
-        yield key, new_prototype
+        yield key, (new_prototype, average_inertia/float(num_docs))
 
     def steps(self):
         return [MRStep(mapper_init=self.load_data, mapper=self.assign_prototype,

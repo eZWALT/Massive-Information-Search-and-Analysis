@@ -30,8 +30,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--prot', default='prototypes.txt', help='Initial prototpes file')
     parser.add_argument('--docs', default='documents.txt', help='Documents data')
-    parser.add_argument('--iter', default=5, type=int, help='Number of iterations')
-    parser.add_argument('--ncores', default=2, type=int, help='Number of parallel processes to use')
+    parser.add_argument('--iter', default=10, type=int, help='Number of iterations')
+    parser.add_argument('--ncores', default=8, type=int, help='Number of parallel processes to use')
 
     args = parser.parse_args()
     assign = {}
@@ -48,6 +48,7 @@ if __name__ == '__main__':
     timer1 = time.time()
     time_first_iter = 0
     first_iter = True
+    distortions = []
     for i in range(args.iter):
         num_iterations += 1
         #print(f"Iteration {i+1} ...")
@@ -67,11 +68,15 @@ if __name__ == '__main__':
             filename = "prototypes_final.txt" if i == args.iter-1 else f"prototypes{i+1}.txt"
             file = open(f"{cwd}/{filename}","w")
             
-            for key, value in mr_job1.parse_output(runner1.cat_output()):
+            for key, (value, distortion) in mr_job1.parse_output(runner1.cat_output()):
                 prototype = ""
+                distortions.append(distortion)
                 for word, freq in value:
                     prototype += f"{word}+{freq} "
                     new_proto[word] = freq
+                
+                new_proto_items = list(new_proto.items())
+                document = [item[0] for item in value]
                     
                 file.write(f"{key}:{prototype}\n")
 
@@ -79,15 +84,20 @@ if __name__ == '__main__':
             if new_proto == old_proto:
                 nomove = True 
             old_proto = new_proto
-
-        #print(f"Time= {(time.time() - tinit)} seconds")
+            
+            
+        
+        if first_iter: 
+            timer = time.time()
+            first_iter = False 
+            time_first_iter = timer - timer1
 
         if nomove:  # If there is no changes in two consecutive iteration we can stop
             #print("Algorithm converged")
             break
         
     timer2 = time.time()  
-    if first_iter == True
 
-    print(f"{timer2-timer1},{num_iterations},{nomove}")
+
+    print(f"{time_first_iter},{timer2-timer1},{num_iterations},{distortion}")
     # Now the last prototype file should have the results
